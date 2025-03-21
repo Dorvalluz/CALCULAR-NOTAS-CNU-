@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Notas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        select, button {
+            margin: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Notas</h2>
+        <label>Digite um número (1 a 20):</label>
+        <select id="valorInput"></select>
+        <br>
+        <div id="notasContainer"></div>
+        <button onclick="calcularResultados()">Calcular</button>
+        <p id="resultado">Resultado: </p>
+        <p id="somaResultados">Soma dos Resultados: </p>
+        <p id="resultadoTotal">Resultado Total: </p>
+        <p><strong>ELABORADO POR DORVAL</strong></p>
+    </div>
+
+    <script>
+        // Populando selects
+        function preencherSelect(select, min, max) {
+            for (let i = min; i <= max; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                select.appendChild(option);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let valorInput = document.getElementById("valorInput");
+            preencherSelect(valorInput, 1, 20);
+
+            let notasContainer = document.getElementById("notasContainer");
+            for (let i = 1; i <= 5; i++) {
+                let labelNota = document.createElement("label");
+                labelNota.textContent = `NOTA ${i}: `;
+                let notaSelect = document.createElement("select");
+                preencherSelect(notaSelect, 1, 10);
+                
+                let labelEixo = document.createElement("label");
+                labelEixo.textContent = ` EIXO ${i}: `;
+                let eixoSelect = document.createElement("select");
+                preencherSelect(eixoSelect, 1, 5);
+                
+                notasContainer.appendChild(labelNota);
+                notasContainer.appendChild(notaSelect);
+                notasContainer.appendChild(labelEixo);
+                notasContainer.appendChild(eixoSelect);
+                notasContainer.appendChild(document.createElement("br"));
+            }
+        });
+
+        function calcularResultados() {
+            let valor = parseFloat(document.getElementById("valorInput").value);
+            let resultadoIntermediario = (100 * valor) / 20;
+            let resultadoFinal = resultadoIntermediario * 0.25;
+            document.getElementById("resultado").textContent = `Resultado: ${resultadoFinal.toFixed(2)}`;
+            
+            let somaResultados = 0;
+            let selects = document.querySelectorAll("#notasContainer select");
+            for (let i = 0; i < selects.length; i += 2) {
+                let acerto = parseFloat(selects[i].value);
+                let eixo = parseFloat(selects[i + 1].value);
+                let resultado = acerto * eixo * 0.55;
+                somaResultados += resultado;
+            }
+            
+            document.getElementById("somaResultados").textContent = `Soma dos Resultados: ${somaResultados.toFixed(2)}`;
+            document.getElementById("resultadoTotal").textContent = `Resultado Total: ${(somaResultados + resultadoFinal).toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
